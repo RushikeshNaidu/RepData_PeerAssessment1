@@ -1,4 +1,4 @@
-#Reproducible Research : Peer Assessment 1
+# Reproducible Research : Peer Assessment 1
 
 ```{r , results="hide"}
 library(lubridate)
@@ -7,30 +7,30 @@ library(data.table)
 
 ```
 
-##Loading and Preprocessing the Data
-###1.Load the data in R
+## Loading and Preprocessing the Data
+### 1.Load the data in R
 
 ```{r}
 file <- read.csv("activity.csv", stringsAsFactors = FALSE)
 ```
-###2.Processing the data
+### 2.Processing the data
 
 ```{r}
 file$date <- as.Date(file$date)
 file$interval <- as.factor(file$interval)
 str(file)
 ```
-##What is the mean total number of steps taken per day?
+## What is the mean total number of steps taken per day?
 ```{r}
 steps_per_day <- tapply(file$steps, file$date, sum, na.rm=TRUE)
 ```
-###1. Plot histogram of the meand number of steps per day
+### 1. Plot histogram of the meand number of steps per day
 
 ```{r}
 qplot(steps_per_day, xlab='Average steps per day',ylab='Frequency', binwidth=500)
 ```
 
-###2. Mean and median total number of steps
+### 2. Mean and median total number of steps
 
 ```{r}
 Steps_per_day_mean <- mean(steps_per_day, na.rm=TRUE)
@@ -39,35 +39,35 @@ Steps_per_day_mean
 Steps_per_day_median
 ```
 
-##What is the daily average activity pattern?
-###1. Mean total number of steps per interval
+## What is the daily average activity pattern?
+### 1. Mean total number of steps per interval
 
 ```{r}
 daily_steps_per_interval_mean <- tapply(file$steps, file$interval, mean,na.rm=TRUE)
 ```
 
-###2. Plot of total mean number of steps in each interval 
+### 2. Plot of total mean number of steps in each interval 
 
 ```{r}
 plot(y = daily_steps_per_interval_mean, x = names(daily_steps_per_interval_mean), type = "l", xlab = "5-Minute-Interval", 
      main = "Daily Activity Pattern", ylab = "Average number of steps")
 ```
 
-###3. The interval in which maximum number of steps taken are :
+### 3. The interval in which maximum number of steps taken are :
 
 ```{r}
 daily_steps_per_interval_mean[daily_steps_per_interval_mean==max(daily_steps_per_interval_mean)]
 ```
 
-##Imputing Missing Values
-###1.Total Number of missing values
+## Imputing Missing Values
+### 1.Total Number of missing values
 
 ```{r}
 num_missing_values <- length(which(is.na(file$steps)))
 num_missing_values
 ```
 
-###2.Imputing Missing values
+### 2.Imputing Missing values
 
 ```{r}
 act_new <- file
@@ -75,9 +75,9 @@ act_new[which(is.na(act_new$steps)),1]<-
   daily_steps_per_interval_mean[as.character(act_new[which(is.na(act_new$steps)),3])]
 ```
 
-##Are there any differences in activity patterns between weekdays and weekends?
+## Are there any differences in activity patterns between weekdays and weekends?
 
-###1.Segregating the data into weekdays and weekends
+### 1.Segregating the data into weekdays and weekends
 ```{r}
 act_new$wd<-weekdays(act_new$date)
 act_new$fwd<- as.factor(c("weekend", "weekday"))
@@ -91,7 +91,7 @@ daily_steps_per_interval_mean_we<-tapply(act_new_we$steps, act_new_we$interval, 
 daily_steps_per_interval_mean_wd<-tapply(act_new_wd$steps, act_new_wd$interval, mean)
 ```
 
-###2.Difference between steps taken in weekdays and weekends
+### 2.Difference between steps taken in weekdays and weekends
 ```{r}
 par(mfrow=c(2,1))
 plot(y = daily_steps_per_interval_mean_wd, x = names(daily_steps_per_interval_mean_wd), type = "l", xlab = "5-Minute Interval", 
